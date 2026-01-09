@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Information Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="form-wrapper">
+        <form id="userForm" onsubmit="return false;">
+            <h2>User Information</h2>
+
+            <label for="name">Full Name</label>
+            <input type="text" id="name" required>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" required>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" required>
+
+            <label for="address">Address</label>
+            <textarea id="address" rows="4" required></textarea>
+
+            <button type="button" id="submitBtn">Submit</button>
+
+            <p id="status"></p>
+        </form>
+    </div>
+
+    <script>
+        const submitBtn = document.getElementById("submitBtn");
+        const statusText = document.getElementById("status");
+
+        submitBtn.addEventListener("click", async function () {
+            const userData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                address: document.getElementById("address").value
+            };
+
+            try {
+                const response = await fetch("http://localhost:3000/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                if (response.ok) {
+                    statusText.innerText = "Form submitted successfully!";
+                } else {
+                    statusText.innerText = "Server error. Submission failed.";
+                }
+            } catch (error) {
+                statusText.innerText = "Cannot connect to server. Make sure backend is running.";
+            }
+        });
+    </script>
+
+</body>
+</html>
